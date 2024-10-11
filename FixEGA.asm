@@ -34,7 +34,7 @@ new_int10:
     mov ax, [old_ax]
     ; Check if it's a "set video mode" call (AH = 0)
     cmp ah, 0
-    jne quick_exit_handler
+    jne exit_handler
 
     ; Check for supported video modes
     cmp al, 04h  ; 320x200 4-color CGA
@@ -49,9 +49,8 @@ new_int10:
     je set_palette
     ;cmp al, 10h  ; 640x350 16-color EGA (for testing)
     ;je set_palette
-    jmp quick_exit_handler
+    jmp exit_handler
 
-quick_exit_handler:
 exit_handler:
     pop es
     pop ds
@@ -69,7 +68,6 @@ set_palette:
     out dx, al
 
     mov dx, 3C9h  ; DAC Data Register
-    mov cx, 16    ; 16 colors to set
 
     xor si, si
 
